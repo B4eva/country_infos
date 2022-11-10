@@ -11,4 +11,6 @@ class AppThemeState extends ChangeNotifier {
     isDarkModeEnabled = true;
     notifyListeners();
   }
+
+  ScrollController controller = ScrollController();
 }

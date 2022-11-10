@@ -22,3 +22,5 @@ class DarkModeSwitch extends HookConsumerWidget {
     );
   }
 }
+
+// https://medium.com/@borankayaalp96/flutter-country-app-bloc-rest-countries-api-ccb82c6f200
