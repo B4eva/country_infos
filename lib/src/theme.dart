@@ -27,7 +27,7 @@ class AppTheme {
   static final darkTheme = ThemeData(
       scaffoldBackgroundColor: AppColors.primaryDark,
       appBarTheme: const AppBarTheme(
-        color: AppColors.white,
+        color: AppColors.primaryDark,
         iconTheme: IconThemeData(
           color: AppColors.white,
         ),

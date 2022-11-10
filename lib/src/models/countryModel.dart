@@ -9,7 +9,12 @@ class CountryModel {
     required this.population,
     required this.continents,
     required this.flagPng,
+    required this.coatOfArms,
+    // required this.language,
+    // required this.currency,
+    required this.timeZone,
     this.unGrouped = 'All Countries',
+    this.carSide = 'left',
   });
 
   final String nameCommon;
@@ -22,6 +27,11 @@ class CountryModel {
   final String continents;
   final String flagPng;
   final String unGrouped;
+  final String carSide;
+  final String coatOfArms;
+  // final String language;
+  // final String currency;
+  final String timeZone;
 
   @override
   List<Object?> get props => [
@@ -51,6 +61,11 @@ class CountryModel {
       population: json["population"],
       continents: json["continents"][0],
       flagPng: json["flags"]["png"],
+      carSide: json['car']['side'],
+      coatOfArms: json['coatOfArms']['png'] ?? '',
+      // currency: json['currencies']['BBD'],
+      timeZone: json['timezones'][0],
+      // language: json['languages']['eng'] ?? ''
     );
   }
 }

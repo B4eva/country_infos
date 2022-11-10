@@ -8,14 +8,14 @@ final goRouter =
   GoRoute(
     path: '/',
     builder: (context, state) => const SearchCountryView(),
-    routes: [
-      GoRoute(
-        path: 'cart',
-        pageBuilder: (context, state) => MaterialPage(
-            key: state.pageKey,
-            fullscreenDialog: true,
-            child: const CountryDetailsView()),
-      ),
+    routes: const [
+      // GoRoute(
+      //   path: 'details',
+      //   pageBuilder: (context, state) => MaterialPage(
+      //       key: state.pageKey,
+      //       fullscreenDialog: true,
+      //       child: const CountryDetailsView()),
+      // ),
     ],
   ),
 ]);

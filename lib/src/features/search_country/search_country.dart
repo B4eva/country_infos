@@ -1,5 +1,6 @@
 import 'package:conutry_infos/src/api_calls/country_repository.dart';
 import 'package:conutry_infos/src/constants/app_sizes.dart';
+import 'package:conutry_infos/src/features/country_details/country_details.dart';
 import 'package:conutry_infos/src/providers/global_provider.dart';
 import 'package:conutry_infos/src/theme.dart';
 import 'package:conutry_infos/src/widgets/dark_mode_switch.dart';
@@ -202,10 +203,33 @@ class _SearchCountryViewState extends ConsumerState<SearchCountryView> {
                           itemBuilder: (context, index) => Padding(
                                 padding: const EdgeInsets.only(
                                     left: 20, right: 25, top: 10),
-                                child: CountryHolder(
-                                    name: snapshot.data![index].nameCommon,
-                                    capital: snapshot.data![index].capital,
-                                    imgUrl: snapshot.data![index].flagPng),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      final data = snapshot.data![index];
+                                      return CountryDetailsView(
+                                          flag: snapshot.data![index].flagPng,
+                                          name:
+                                              snapshot.data![index].nameCommon,
+                                          population:
+                                              snapshot.data![index].capital,
+                                          area: data.area.toString(),
+                                          capital: data.capital,
+                                          coatOfArms: data.coatOfArms,
+                                          continent: data.continents,
+                                          region: data.region,
+                                          subregion: data.subregion,
+                                          // language: data.language,
+                                          timeZone: data.timeZone,
+                                          carSide: data.carSide);
+                                    }));
+                                  },
+                                  child: CountryHolder(
+                                      name: snapshot.data![index].nameCommon,
+                                      capital: snapshot.data![index].capital,
+                                      imgUrl: snapshot.data![index].flagPng),
+                                ),
                               ));
                     }
                     return Container(
