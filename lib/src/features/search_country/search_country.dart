@@ -1,121 +1,262 @@
+import 'package:conutry_infos/src/api_calls/country_repository.dart';
 import 'package:conutry_infos/src/constants/app_sizes.dart';
 import 'package:conutry_infos/src/providers/global_provider.dart';
 import 'package:conutry_infos/src/theme.dart';
 import 'package:conutry_infos/src/widgets/dark_mode_switch.dart';
-import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
-
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../widgets/search_bar.dart';
 
-class SearchCountryView extends HookConsumerWidget {
+class SearchCountryView extends ConsumerStatefulWidget {
   const SearchCountryView({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _SearchCountryViewState createState() => _SearchCountryViewState();
+}
+
+class _SearchCountryViewState extends ConsumerState<SearchCountryView> {
+  @override
+  void initState() {
+    super.initState();
+    // final provider = ref.watch(searchCountryNotifier);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final appThemeState = ref.watch(appThemeStateNotifier);
+    ScrollController controller = ScrollController();
     return Scaffold(
-      body: Container(
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset(
-                        'assets/logo.png',
-                        height: 23,
-                        width: 90,
-                        color: appThemeState.isDarkModeEnabled
-                            ? AppColors.white
-                            : AppColors.primaryDark,
-                      ),
-                      const DarkModeSwitch()
-                    ],
+      body: SingleChildScrollView(
+        controller: controller,
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    'assets/logo.png',
+                    height: 23,
+                    width: 90,
+                    color: appThemeState.isDarkModeEnabled
+                        ? AppColors.white
+                        : AppColors.primaryDark,
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  child: SearchBox(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 25, top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 73,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.borders, width: 0.5)),
-                        child: Row(children: [
-                          IconButton(
-                              onPressed: () {
-                                _showBottomSheet(
-                                  context,
+                  const DarkModeSwitch()
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              child: SearchBox(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 25, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 73,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(color: AppColors.borders, width: 0.5)),
+                    child: Row(children: [
+                      IconButton(
+                          onPressed: () {
+                            _showBottomSheet(
+                              context,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.language,
+                          )),
+                      const Text(
+                        'EN',
+                        style: TextStyle(fontSize: 10),
+                      )
+                    ]),
+                  ),
+                  Container(
+                    width: 73,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(color: AppColors.borders, width: 0.5)),
+                    child: Row(children: [
+                      IconButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) {
+                                return GestureDetector(
+                                  onTap: () => Navigator.of(context).pop(),
+                                  child: Container(
+                                    color: const Color.fromRGBO(0, 0, 0, 0.001),
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: DraggableScrollableSheet(
+                                        expand: false,
+                                        initialChildSize: 0.4,
+                                        minChildSize: 0.2,
+                                        maxChildSize: 0.75,
+                                        builder: (_, controller) {
+                                          return Container(
+                                            decoration: const BoxDecoration(
+                                              //TODO: change the color depending on themeMode
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(25.0),
+                                                topRight: Radius.circular(25.0),
+                                              ),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Icon(
+                                                  Icons.remove,
+                                                  color: Colors.grey[600],
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20,
+                                                          right: 20,
+                                                          top: 5),
+                                                  child: SizedBox(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        const Text('Filter'),
+                                                        IconButton(
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            icon: const Icon(
+                                                                Icons.cancel))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 10),
+                                                      child: ListView(
+                                                        controller: controller,
+                                                        children: const [
+                                                          ExpantionTileSample(),
+                                                          ExpantionTileSample()
+                                                        ],
+                                                      )),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
                                 );
                               },
-                              icon: const Icon(
-                                Icons.language,
-                              )),
-                          const Text(
-                            'EN',
-                            style: TextStyle(fontSize: 10),
-                          )
-                        ]),
-                      ),
-                      Container(
-                        width: 73,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.borders, width: 0.5)),
-                        child: Row(children: [
-                          IconButton(
-                              onPressed: () {}, icon: const Icon(Icons.filter)),
-                          const Text(
-                            'Filter',
-                            style: TextStyle(fontSize: 10),
-                          )
-                        ]),
-                      ),
-                    ],
+                            );
+                          },
+                          icon: const Icon(Icons.filter)),
+                      const Text(
+                        'Filter',
+                        style: TextStyle(fontSize: 10),
+                      )
+                    ]),
                   ),
-                ),
-                gapH20,
-                SizedBox(
-                  height: double.maxFinite,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 20,
-                      itemBuilder: (context, index) => const Padding(
-                            padding:
-                                EdgeInsets.only(left: 20, right: 25, top: 10),
-                            child: CountryHolder(),
-                          )),
-                )
-              ],
+                ],
+              ),
             ),
-          ),
+            gapH20,
+            SizedBox(
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: FutureBuilder(
+                  future: CountryRepository().getCountries(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Container(
+                        child: const Center(
+                            child: Text('No Country For the Moment')),
+                      );
+                    }
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          controller: controller,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) => Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 25, top: 10),
+                                child: CountryHolder(
+                                    name: snapshot.data![index].nameCommon,
+                                    capital: snapshot.data![index].capital,
+                                    imgUrl: snapshot.data![index].flagPng),
+                              ));
+                    }
+                    return Container(
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  },
+                ))
+          ],
         ),
       ),
     );
   }
 }
 
+class ExpantionTileSample extends StatelessWidget {
+  const ExpantionTileSample({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+      ),
+      child: ExpansionTile(
+        title: const Text('continent'),
+        children: [
+          for (var i = 0; i <= 10; i++)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Africa'),
+                Checkbox(value: false, onChanged: (value) {})
+              ],
+            )
+        ],
+      ),
+    );
+  }
+}
+
 class CountryHolder extends StatelessWidget {
+  final String imgUrl;
+  final String name;
+  final String capital;
   const CountryHolder({
     Key? key,
+    required this.imgUrl,
+    required this.name,
+    required this.capital,
   }) : super(key: key);
 
   @override
@@ -125,15 +266,24 @@ class CountryHolder extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset(
-                'assets/logo.png',
+              Image.network(
+                imgUrl,
                 height: 30,
                 width: 30,
               ),
               gapW20,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [Text('Afganistan'), Text('Kabul')],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(overflow: TextOverflow.ellipsis),
+                    ),
+                    Text(capital,
+                        style: const TextStyle(overflow: TextOverflow.ellipsis))
+                  ],
+                ),
               ),
             ],
           ),
@@ -230,11 +380,4 @@ void _showBottomSheet(BuildContext context) {
       );
     },
   );
-}
-
-void loadList() async {
-  var res = await Dio().get('https://restcountries.com/v3.1/all');
-  if (res.statusCode == 200) {
-    print(res.data);
-  }
 }

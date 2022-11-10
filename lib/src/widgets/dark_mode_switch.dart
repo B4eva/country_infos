@@ -1,9 +1,9 @@
 import 'package:conutry_infos/src/providers/global_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DarkModeSwitch extends HookConsumerWidget {
-  const DarkModeSwitch();
+class DarkModeSwitch extends ConsumerWidget {
+  const DarkModeSwitch({super.key});
   // final void Function(bool)? onChanged;
   // final bool value;
 

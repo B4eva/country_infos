@@ -3,9 +3,9 @@ import 'package:conutry_infos/src/providers/global_provider.dart';
 import 'package:conutry_infos/src/routing/app_router.dart';
 import 'package:conutry_infos/src/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MyApp extends HookConsumerWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override

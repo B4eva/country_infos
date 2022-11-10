@@ -41,8 +41,11 @@ class AppTheme {
         ),
       ),
       bottomSheetTheme:
-          const BottomSheetThemeData(backgroundColor: AppColors.primaryDark)
+          const BottomSheetThemeData(backgroundColor: AppColors.primaryDark),
+      cardTheme: const CardTheme(color: AppColors.primaryDark)
+
       // ... more
+
       );
 }
 
