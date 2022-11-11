@@ -18,8 +18,7 @@ class MyApp extends ConsumerWidget {
       onGenerateTitle: (BuildContext context) => 'Country Infos'.hardcoded,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode:
-          appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      themeMode: appThemeState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
     );
   }
 }

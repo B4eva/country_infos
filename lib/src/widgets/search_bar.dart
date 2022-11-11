@@ -2,9 +2,11 @@ import 'package:conutry_infos/src/theme.dart';
 import 'package:flutter/material.dart';
 
 class SearchBox extends StatefulWidget {
+  final Color color;
   final Function(String)? textChanged;
 
-  const SearchBox({Key? key, this.textChanged}) : super(key: key);
+  const SearchBox({Key? key, this.textChanged, required this.color})
+      : super(key: key);
 
   @override
   _SearchBoxState createState() => _SearchBoxState();
@@ -34,8 +36,9 @@ class _SearchBoxState extends State<SearchBox> {
         decoration: InputDecoration(
           hintText: 'Search Country',
           filled: true,
-          fillColor: AppColors.filledColor,
-          hintStyle: const TextStyle(),
+          fillColor: widget.color,
+          hintStyle: const TextStyle(
+              color: AppColors.gray, fontWeight: FontWeight.bold),
           prefixIcon: const Icon(Icons.search),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(2),

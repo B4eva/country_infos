@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
 class AppThemeState extends ChangeNotifier {
-  var isDarkModeEnabled = false;
+  bool _isDarkModeEnabled = false;
+
+  bool get isDarkMode => _isDarkModeEnabled;
+
+  setDarkMode(bool value) {
+    _isDarkModeEnabled = value;
+  }
+
   void setLightTheme() {
-    isDarkModeEnabled = false;
+    _isDarkModeEnabled = !_isDarkModeEnabled;
     notifyListeners();
   }
 
   void setDarkTheme() {
-    isDarkModeEnabled = true;
+    _isDarkModeEnabled = true;
     notifyListeners();
   }
 

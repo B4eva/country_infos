@@ -47,6 +47,10 @@ class CountryModel {
       ];
 
   factory CountryModel.fromJson(Map<String, dynamic> json) {
+    // var capitalsFromJson = json['capital'];
+    // List<String> capitalsList =
+    //     List<String>.from(capitalsFromJson).map((e) => e).toList();
+
     return CountryModel(
       nameCommon: json["name"]["common"],
       nameOfficial: json["name"]["official"],
