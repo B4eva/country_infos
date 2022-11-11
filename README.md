@@ -9,6 +9,14 @@ An app that displays a multitude of contries and detailed information about them
 
 ## Features
 
+* Countries and Details 
+
+* Dartk Mode
+
+* Multi-language
+
+* search country (Filter by name, )
+
 
 
 ## Technology Used
@@ -17,6 +25,11 @@ An app that displays a multitude of contries and detailed information about them
 <img src="https://img.shields.io/badge/version-3.0.5-orange.svg" alt="1.0.0">
 
 ## Architecture used
+
+- Country Info is build on MVVM(Model-View View-model) Architecture. 
+- We use Riverpod to manage state.
+
+
 
 
 
@@ -30,12 +43,21 @@ An app that displays a multitude of contries and detailed information about them
 
 ## Design
 
+The app is both responsive and adaptive. It will move to the center of the screen when some certain contrains are met. 
+
+I make use of material design principles.
+
+
 
 ## Packages Used
 
 * go_router : A Declarative Routing Package for Flutter. This permit the app to easy transit from one screen to another.
 
-* Riverpod_hook: 
+* Riverpod_flutter: For state management.
+
+* http: This is use for http calls and networking.
+
+* grouped_list: This is used to seperate the country list data in descending order by name.
 
  
 
@@ -49,9 +71,20 @@ An app that displays a multitude of contries and detailed information about them
 
 ## Challenges
 
+## Running the App
+
+* Intall flutter. you can get it from here and all related sotfwares
+- [Fluitter SDK](https://docs.flutter.dev)
+
+* Install android studio. You cpuld use this for as an idea to play with flutter but it's main objective is to help you get android related plugins.
+- [Android studio sdk](https://docs.flutter.dev)
+
+- Run flutter pub get from terminal after insatalling all this. Follow the steps provided in the terminal for any other required piece of sofware or plugin
 
 
-## New to Flutter/Dart
+
+
+## New to Flutter/Dart ? 
 
 A few resources to get you started if this is your first Flutter project:
 

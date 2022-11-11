@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:conutry_infos/src/providers/global_provider.dart';
+import 'package:conutry_infos/src/widgets/responsive_center.dart';
 import 'package:flutter/material.dart';
 
 import 'package:conutry_infos/src/constants/app_sizes.dart';
@@ -43,21 +44,35 @@ class CountryDetailsView extends ConsumerStatefulWidget {
 }
 
 class _CountryDetailsViewState extends ConsumerState<CountryDetailsView> {
+  // List<String> images =  widget.flag;
+  final PageController _pageController = PageController();
+  int _currentPageIndex = 0;
+
+  void setCurrentPageIndex(value) {
+    _currentPageIndex + 1;
+    setState(() {
+      _currentPageIndex = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final appthemProvider = ref.watch(appThemeStateNotifier);
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: appthemProvider.isDarkMode
-              ? AppColors.primaryDark
-              : AppColors.white,
-          automaticallyImplyLeading: true,
-          title: Text(
-            widget.name,
-          ),
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: appthemProvider.isDarkMode
+            ? AppColors.primaryDark
+            : AppColors.white,
+        automaticallyImplyLeading: true,
+        title: Text(
+          widget.name,
         ),
-        body: Container(
+      ),
+      body: ResponsiveCenter(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: SingleChildScrollView(
             child: Column(
@@ -67,7 +82,75 @@ class _CountryDetailsViewState extends ConsumerState<CountryDetailsView> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.network(widget.flag),
+                    Stack(
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          width: MediaQuery.of(context).size.width,
+                          child: PageView.builder(
+                              itemCount: 3,
+                              pageSnapping: true,
+                              controller: _pageController,
+                              onPageChanged: setCurrentPageIndex,
+                              itemBuilder: (context, pagePosition) {
+                                return Container(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Image.network(
+                                    widget.flag,
+                                    fit: BoxFit.cover,
+                                  ),
+                                );
+                              }),
+                        ),
+                        Positioned(
+                            left: 20,
+                            top: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                carouselButton(
+                                  icon: Icons.arrow_back_ios,
+                                  press: () {
+                                    _pageController.previousPage(
+                                        duration: const Duration(seconds: 1),
+                                        curve: Curves.ease);
+                                  },
+                                ),
+                                gapW32,
+                              ],
+                            )),
+                        Positioned(
+                            right: 20,
+                            top: 100,
+                            child: carouselButton(
+                              icon: Icons.arrow_forward_ios,
+                              press: () {
+                                _pageController.nextPage(
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.ease);
+                              },
+                            )),
+                        // TODO: Page index indicator
+                        Positioned(
+                            bottom: MediaQuery.of(context).size.height / 25,
+                            right: MediaQuery.of(context).size.width / 2.6,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: List.generate(
+                                  3,
+                                  (index) => Container(
+                                    margin: const EdgeInsets.all(3),
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                        color: _currentPageIndex == index
+                                            ? AppColors.white
+                                            : const Color(0xFF999999),
+                                        shape: BoxShape.circle),
+                                  ),
+                                ))),
+                      ],
+                    )
                   ],
                 ),
                 gapH20,
@@ -118,7 +201,7 @@ class _CountryDetailsViewState extends ConsumerState<CountryDetailsView> {
                 gapH8,
                 MyRichText(
                   lable: 'Area',
-                  property: widget.area.toString(),
+                  property: '${widget.area.toString()} Km2',
                 ),
                 gapH8,
                 const MyRichText(
@@ -153,7 +236,39 @@ class _CountryDetailsViewState extends ConsumerState<CountryDetailsView> {
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
+  }
+}
+
+class carouselButton extends StatelessWidget {
+  const carouselButton({
+    Key? key,
+    required this.icon,
+    required this.press,
+  }) : super(key: key);
+
+  final IconData icon;
+  final VoidCallback press;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 32,
+      width: 32,
+      decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 194, 189, 189), shape: BoxShape.circle),
+      child: Center(
+        child: IconButton(
+          icon: Icon(
+            icon,
+            size: 10,
+          ),
+          onPressed: () {},
+        ),
+      ),
+    );
   }
 }
 
@@ -168,18 +283,21 @@ class MyRichText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-          text: '$lable : ',
-          style: DefaultTextStyle.of(context).style.copyWith(fontSize: 16),
-          children: [
-            TextSpan(
-                text: property,
-                style: const TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    color: AppColors.subTextColor,
-                    fontSize: 16))
-          ]),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: RichText(
+        text: TextSpan(
+            text: '$lable : ',
+            style: DefaultTextStyle.of(context).style.copyWith(fontSize: 16),
+            children: [
+              TextSpan(
+                  text: property,
+                  style: const TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      color: AppColors.subTextColor,
+                      fontSize: 16))
+            ]),
+      ),
     );
   }
 }

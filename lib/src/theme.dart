@@ -6,7 +6,10 @@ class AppTheme {
   // Private Constructor
   AppTheme._();
   static final lightTheme = ThemeData(
+      hintColor: AppColors.filledDark,
       scaffoldBackgroundColor: AppColors.white,
+      // checkboxTheme: CheckboxThemeData(checkColor: ),
+      iconTheme: const IconThemeData(color: AppColors.primaryDark),
       appBarTheme: const AppBarTheme(
           titleTextStyle: TextStyle(
             color: AppColors.graywarm,
@@ -28,6 +31,7 @@ class AppTheme {
       );
 
   static final darkTheme = ThemeData(
+      hintColor: AppColors.white,
       scaffoldBackgroundColor: AppColors.primaryDark,
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.primaryDark,
@@ -36,6 +40,7 @@ class AppTheme {
           color: AppColors.white,
         ),
       ),
+      iconTheme: const IconThemeData(color: AppColors.white),
       textTheme: const TextTheme(
         bodyText2: TextStyle(
           color: Colors.white,
@@ -69,4 +74,8 @@ class AppColors {
   static const gray = Color(0xFFEAECF0);
 
   static const graywarm = Color(0xFF1C1917);
+
+  static const filledDark = Color(0x0098a2b3);
+
+  static const hintColor = Color(0xFF667085);
 }

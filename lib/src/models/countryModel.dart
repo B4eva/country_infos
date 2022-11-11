@@ -10,7 +10,7 @@ class CountryModel {
     required this.continents,
     required this.flagPng,
     required this.coatOfArms,
-    // required this.language,
+
     // required this.currency,
     required this.timeZone,
     this.unGrouped = 'All Countries',
@@ -29,6 +29,7 @@ class CountryModel {
   final String unGrouped;
   final String carSide;
   final String coatOfArms;
+
   // final String language;
   // final String currency;
   final String timeZone;
@@ -73,3 +74,9 @@ class CountryModel {
     );
   }
 }
+
+
+// class Language { 
+// String 
+
+// }

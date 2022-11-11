@@ -1,12 +1,13 @@
+import 'dart:convert';
+
+import 'package:conutry_infos/src/api_calls/country_repository.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../models/countryModel.dart';
+
 class SearchCountryViewModel extends ChangeNotifier {
-
-  
-
-
-
-
+  final CountryRepository _countryRepository = CountryRepository();
+  late List<CountryModel> countryList = _countryRepository.countryList;
 }
 
 

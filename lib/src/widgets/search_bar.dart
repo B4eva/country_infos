@@ -38,8 +38,11 @@ class _SearchBoxState extends State<SearchBox> {
           filled: true,
           fillColor: widget.color,
           hintStyle: const TextStyle(
-              color: AppColors.gray, fontWeight: FontWeight.bold),
-          prefixIcon: const Icon(Icons.search),
+              color: AppColors.hintColor, fontWeight: FontWeight.bold),
+          prefixIcon: const Icon(
+            Icons.search,
+            color: AppColors.hintColor,
+          ),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(2),
               borderSide: BorderSide.none),

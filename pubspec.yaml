@@ -50,6 +50,8 @@ dependencies:
    
   dio: any
 
+  grouped_list: ^5.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

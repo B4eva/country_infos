@@ -1,15 +1,18 @@
 import 'package:conutry_infos/src/api_calls/country_repository.dart';
 import 'package:conutry_infos/src/constants/app_sizes.dart';
-import 'package:conutry_infos/src/features/country_details/country_details.dart';
 import 'package:conutry_infos/src/providers/app_theme_state.dart';
 import 'package:conutry_infos/src/providers/global_provider.dart';
 import 'package:conutry_infos/src/theme.dart';
 import 'package:conutry_infos/src/widgets/dark_mode_switch.dart';
+import 'package:conutry_infos/src/widgets/responsive_center.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:grouped_list/grouped_list.dart';
 
+import '../../models/countryModel.dart';
 import '../../widgets/search_bar.dart';
+import '../country_details/country_details.dart';
 
 class SearchCountryView extends ConsumerStatefulWidget {
   const SearchCountryView({
@@ -24,15 +27,30 @@ class _SearchCountryViewState extends ConsumerState<SearchCountryView> {
   @override
   void initState() {
     super.initState();
-    // final provider = ref.watch(searchCountryNotifier);
+  }
+
+  List<CountryModel> allCountries = [];
+
+  void searchCountry(String query) {
+    final suggestions = CountryRepository().countryList.where((country) {
+      final countryName = country.nameCommon.toLowerCase();
+      return countryName.contains(query);
+    }).toList();
+
+    setState(() {
+      allCountries = suggestions;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    // print('all countries $allCountries');
     final appThemeState = ref.watch(appThemeStateNotifier);
+    final appThemeStat = ref.watch(searchCountryNotifier);
     ScrollController controller = ScrollController();
     return Scaffold(
-      body: SingleChildScrollView(
+        body: ResponsiveCenter(
+      child: SingleChildScrollView(
         controller: controller,
         child: SafeArea(
           child: Column(
@@ -60,9 +78,10 @@ class _SearchCountryViewState extends ConsumerState<SearchCountryView> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                 child: SearchBox(
+                    textChanged: (p0) => searchCountry,
                     color: appThemeState.isDarkMode
                         ? AppColors.primaryDark
-                        : AppColors.white),
+                        : AppColors.gray),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 25, top: 10),
@@ -186,7 +205,7 @@ class _SearchCountryViewState extends ConsumerState<SearchCountryView> {
                                 },
                               );
                             },
-                            icon: const Icon(Icons.filter)),
+                            icon: const Icon(Icons.filter_alt_sharp)),
                         const Text(
                           'Filter',
                           style: TextStyle(fontSize: 10),
@@ -204,49 +223,66 @@ class _SearchCountryViewState extends ConsumerState<SearchCountryView> {
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Container(
-                          child: const Center(
-                              child: Text('No Country For the Moment')),
+                          child: Column(
+                            children: [
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.refresh)),
+                              const Center(
+                                child: Text('No Country At  the Moment'),
+                              ),
+                            ],
+                          ),
                         );
                       }
                       if (snapshot.hasData) {
-                        return ListView.separated(
-                            separatorBuilder: (context, index) => const Padding(
-                                  padding: EdgeInsets.only(bottom: 15),
-                                ),
-                            controller: controller,
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) => Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 25),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        final data = snapshot.data![index];
-                                        return CountryDetailsView(
-                                            flag: snapshot.data![index].flagPng,
-                                            name: snapshot
-                                                .data![index].nameCommon,
-                                            population:
-                                                snapshot.data![index].capital,
-                                            area: data.area.toString(),
-                                            capital: data.capital,
-                                            coatOfArms: data.coatOfArms,
-                                            continent: data.continents,
-                                            region: data.region,
-                                            subregion: data.subregion,
-                                            // language: data.language,
-                                            timeZone: data.timeZone,
-                                            carSide: data.carSide);
-                                      }));
-                                    },
-                                    child: CountryHolder(
-                                        name: snapshot.data![index].nameCommon,
-                                        capital: snapshot.data![index].capital,
-                                        imgUrl: snapshot.data![index].flagPng),
-                                  ),
-                                ));
+                        return GroupedListView(
+                          elements: snapshot.data!,
+                          groupBy: ((element) => element.nameOfficial),
+                          groupComparator: (value1, value2) =>
+                              value2.compareTo(value1),
+                          itemComparator: (item1, item2) =>
+                              item1.nameOfficial.compareTo(item2.nameOfficial),
+                          useStickyGroupSeparators: false,
+                          order: GroupedListOrder.DESC,
+                          groupSeparatorBuilder: ((value) => Padding(
+                                padding: const EdgeInsets.only(bottom: 15),
+                                child: Text(value
+                                    .trim()
+                                    .split('')
+                                    .map((e) => e[0])
+                                    .take(1)
+                                    .join()),
+                              )),
+                          itemBuilder: (context, element) => Padding(
+                            padding: const EdgeInsets.only(left: 20, right: 25),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  final data = element;
+                                  return CountryDetailsView(
+                                      flag: data.flagPng,
+                                      name: data.nameOfficial,
+                                      population: data.population.toString(),
+                                      area: data.area.toString(),
+                                      capital: data.capital,
+                                      coatOfArms: data.coatOfArms,
+                                      continent: data.continents,
+                                      region: data.region,
+                                      subregion: data.subregion,
+                                      // language: data.language,
+                                      timeZone: data.timeZone,
+                                      carSide: data.carSide);
+                                }));
+                              },
+                              child: CountryHolder(
+                                  name: element.nameOfficial,
+                                  capital: element.capital,
+                                  imgUrl: element.flagPng),
+                            ),
+                          ),
+                        );
                       }
                       return Container(
                         child: const Center(child: CircularProgressIndicator()),
@@ -257,7 +293,7 @@ class _SearchCountryViewState extends ConsumerState<SearchCountryView> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
 
