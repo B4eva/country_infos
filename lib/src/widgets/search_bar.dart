@@ -31,6 +31,7 @@ class _SearchBoxState extends State<SearchBox> {
     return SizedBox(
       height: 48,
       child: TextField(
+        style: const TextStyle(color: AppColors.hintColor),
         textAlign: TextAlign.center,
         controller: controller,
         decoration: InputDecoration(

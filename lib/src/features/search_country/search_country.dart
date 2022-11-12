@@ -14,6 +14,15 @@ import '../../models/countryModel.dart';
 import '../../widgets/search_bar.dart';
 import '../country_details/country_details.dart';
 
+List<String> continents = [
+  'Africa',
+  'Asia',
+  'Europe',
+  'South America',
+  'North America',
+  ''
+];
+
 class SearchCountryView extends ConsumerStatefulWidget {
   const SearchCountryView({
     super.key,
@@ -189,8 +198,14 @@ class _SearchCountryViewState extends ConsumerState<SearchCountryView> {
                                                           controller:
                                                               controller,
                                                           children: const [
-                                                            ExpantionTileSample(),
-                                                            ExpantionTileSample()
+                                                            ExpantionTileSample(
+                                                              title:
+                                                                  'Continent',
+                                                            ),
+                                                            ExpantionTileSample(
+                                                              title:
+                                                                  'Time Zone',
+                                                            )
                                                           ],
                                                         )),
                                                   ),
@@ -297,11 +312,18 @@ class _SearchCountryViewState extends ConsumerState<SearchCountryView> {
   }
 }
 
-class ExpantionTileSample extends StatelessWidget {
+class ExpantionTileSample extends StatefulWidget {
+  final String? title;
   const ExpantionTileSample({
     Key? key,
+    required this.title,
   }) : super(key: key);
 
+  @override
+  State<ExpantionTileSample> createState() => _ExpantionTileSampleState();
+}
+
+class _ExpantionTileSampleState extends State<ExpantionTileSample> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -310,21 +332,35 @@ class ExpantionTileSample extends StatelessWidget {
       ),
       child: ExpansionTile(
         title: Text(
-          'continent',
+          widget.title!,
           style: DefaultTextStyle.of(context).style,
         ),
         children: [
-          for (var i = 0; i <= 10; i++)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Africa',
-                  style: DefaultTextStyle.of(context).style,
-                ),
-                Checkbox(value: false, onChanged: (value) {})
-              ],
-            )
+          Column(
+            children: List.generate(
+              6,
+              ((index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          continents[index],
+                          style: DefaultTextStyle.of(context).style,
+                        ),
+                        gapW32,
+                        Checkbox(
+                            value: false,
+                            onChanged: (value) {
+                              setState(() {
+                                value = true;
+                              });
+                            }),
+                      ],
+                    ),
+                  )),
+            ),
+          ),
         ],
       ),
     );
