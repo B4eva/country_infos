@@ -71,7 +71,7 @@ I make use of material design principles.
 
 ## Appetize Link 
 
-[Contry infos Appetive APK](https://appetize.io/app/qutkeu2oe7nf4kdfbg75ufcpge?device=pixel4&osVersion=12.0&scale=75)
+[Contry infos Appetize APK](https://appetize.io/app/qutkeu2oe7nf4kdfbg75ufcpge?device=pixel4&osVersion=12.0&scale=75)
 
 ## Challenges
 
