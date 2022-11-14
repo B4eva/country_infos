@@ -77,10 +77,10 @@ I make use of material design principles.
 
 ## Running the App
 
-* Intall flutter. you can get it from here and all related sotfwares
+* Intall flutter. you can get it from here and all related documentation
 - [Fluitter SDK](https://docs.flutter.dev)
 
-* Install android studio. You cpuld use this for as an idea to play with flutter but it's main objective is to help you get android related plugins.
+* Install android studio. You could use this for as an idea to play with flutter but it's main objective is to help you get android related plugins.
 - [Android studio sdk](https://docs.flutter.dev)
 
 - Run flutter pub get from terminal after insatalling all this. Follow the steps provided in the terminal for any other required piece of sofware or plugin
